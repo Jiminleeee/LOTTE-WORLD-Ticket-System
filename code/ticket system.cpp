@@ -31,36 +31,49 @@ int main()
  // 오늘 날짜 구하기 
 	time_t timer;
 	struct tm * t;
-	timer = time(NULL);		//1970년 1월 1일 0시 0분 0초부터 시작하여 현재까지의 초 
-	t = localtime(&timer); 	// 포맷팅을 위해 구조체에 넣음  
+	timer = time(NULL);			//1970년 1월 1일 0시 0분 0초부터 시작하여 현재까지의 초 
+	t = localtime(&timer); 		// 포맷팅을 위해 구조체에 넣음  
 	
 	while(true)
 	{
-		printf("권종을 선택하세요.\n1.  종합이용권\n2.  파크이용권\n");
+		printf("권종을 선택하세요.\n1.  종합이용권(롯데월드 + 민속박물관)\n2.  파크이용권(롯데월드)\n");
 		scanf("%d", &ticketChoice);
 	
-		printf("\n이용시간을 선택하세요.\n1.  1Day\n2.  After4\n");
+		printf("\n이용시간을 선택하세요.\n1.  1Day\n2.  After4(오후 4시부터 입장)\n");
 		scanf("%d", &ticketTime); 
 		
 		printf("\n생년월일을 입력하세요. 예) 20220316 \n");
 		scanf("%d", &personalNumber);
 		
+		printf("\n몇 개를 주문하시겠습니까?\n");
+		scanf("%d", &ticketAmount); 
+		 
+		printf("\n우대사항을 선택하세요.\n1.  없음(나이 우대는 자동 처리)\n2.  장애인\n3.  국가유공자\n4.  휴가장병\n5.  임산부\n6.  다둥이 행복카드\n");
+		scanf("%d", &specialOffer);
 		
 		
 	// 오늘 날짜를  생년월일 형식으로 바꾸기 
 		todayDate = (t -> tm_year + 1900) * 10000 + (t -> tm_mon + 1) * 100 + t -> tm_mday; 	// *10000, *100 > 0을 뒤에 붙여 3월9일이 아닌 0309의 형태로 나오게 한다. 
 	
-	
 	//만 나이 계산
 		age = (todayDate - personalNumber)/10000; 
 	
-	
 	// 연령대별 분류에 따른 기본 티켓값 
-		// 0 ~ 36개월 미만 
-			if(age < MIN_CHILD)
+		// 0 ~ 12개월 미만 
+			if(age < MIN_BABY)
 			{
 				basicFee = 0;
 			}
+		
+		// 12개월 이상 ~ 36개월 미만
+			if(age >= MIN_BABY && age < MIN_CHILD && ticketAmount > 10)		// 단체 입장인 경우에만 입장료 있음(단체 기준은 임의로 10명 초과로 정함) 
+			{
+				basicFee = FEE_BABY;
+			}
+			else if(age >= MIN_BABY && age < MIN_CHILD && ticketAmount <= 10)	// 단체 입장이 아닌 경우 무료 입장 
+			{
+				basicFee = 0;
+			}	
 			
 		// 36개월 이상 ~ 만 12세, 만 65세 이상 
 			if(age >= MIN_CHILD && age <= MAX_CHILD || age > MAX_ADULT)
@@ -133,15 +146,8 @@ int main()
 					basicFee = FEE_ADULT_PARK_AFTER4;
 				}
 			} 	
-		
-		printf("\n몇 개를 주문하시겠습니까?  (최대 주문량 10개)\n");
-		scanf("%d", &ticketAmount); 
-		 
-		printf("\n우대사항을 선택하세요.\n1.  없음(나이 우대는 자동 처리)\n2.  장애인\n3.  국가유공자\n4.  휴가장병\n5.  임산부\n6.  다둥이 행복카드\n");
-		scanf("%d", &specialOffer);
-		
-	// 동반1인 조건 제외한 우대가격
-		
+				
+	// 동반1인 조건 제외한 우대가격		
 		if(specialOffer == 2)
 		{
 			basicFee *= DISCOUNT_RATE_DISABLED;
@@ -163,20 +169,29 @@ int main()
 			basicFee *= DISCOUNT_RATE_FAMILY;
 		}
 
-	// 개수에 따른 요금 계산 
-		
+	// 개수에 따른 요금 계산 		
 		totalFee = basicFee * ticketAmount;	
-		
+	
+	// 티켓 가격 총합 출력 (무료인 경우 '무료 입장입니다')	
+		if(totalFee == 0)
+		{
+			printf("\n무료 입장입니다.\n");
+		}
+		else
+		{
 		printf("\n가격은 %d 원 입니다.\n감사합니다.\n", totalFee);
+		}
 		
-		printf("\n계속 발권하시겠습니까?\n1.  티켓 발권\n2.  종료\n");
+	// 티켓 구매 계속 진행 여부 확인	
+		printf("\n티켓을 계속 구매 하시겠습니까?\n1.  티켓 구매\n2.  종료\n");
 		scanf("%d", &againProcess);
 		if(againProcess == 2)
 		{
-			printf("\n티켓 발권을 종료합니다.  감사합니다.\n");
+			printf("\n티켓 구매를 종료합니다.  감사합니다.\n");
 			break; 
 		}
-		
+	
+	printf("\n");	// 가독성을 위해 한 줄 띄우기	
 		
 	}	
 	
