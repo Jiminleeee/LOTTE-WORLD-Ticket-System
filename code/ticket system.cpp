@@ -31,16 +31,22 @@ int main()
  // 오늘 날짜 구하기 
 	time_t timer;
 	struct tm * t;
-	timer = time(NULL);			//1970년 1월 1일 0시 0분 0초부터 시작하여 현재까지의 초 
+	timer = time(NULL);			//1900년 1월 1일 0시 0분 0초부터 시작하여 현재까지의 초 
 	t = localtime(&timer); 		// 포맷팅을 위해 구조체에 넣음  
 	
 	while(true)
 	{
-		printf("권종을 선택하세요.\n1.  종합이용권(롯데월드 + 민속박물관)\n2.  파크이용권(롯데월드)\n");
-		scanf("%d", &ticketChoice);
-	
-		printf("\n이용시간을 선택하세요.\n1.  1Day\n2.  After4(오후 4시부터 입장)\n");
-		scanf("%d", &ticketTime); 
+		do
+		{
+			printf("권종을 선택하세요.\n1.  종합이용권(롯데월드 + 민속박물관)\n2.  파크이용권(롯데월드)\n");
+			scanf("%d", &ticketChoice);
+		} while(!(ticketChoice == 1 || ticketChoice== 2)); 
+		
+		do
+		{
+			printf("\n이용시간을 선택하세요.\n1.  1Day\n2.  After4(오후 4시부터 입장)\n");
+			scanf("%d", &ticketTime); 
+		} while(!(ticketTime == 1 || ticketTime == 2));
 		
 		printf("\n생년월일을 입력하세요. 예) 20220316 \n");
 		scanf("%d", &personalNumber);
@@ -48,9 +54,11 @@ int main()
 		printf("\n몇 개를 주문하시겠습니까?\n");
 		scanf("%d", &ticketAmount); 
 		 
-		printf("\n우대사항을 선택하세요.\n1.  없음(나이 우대는 자동 처리)\n2.  장애인\n3.  국가유공자\n4.  휴가장병\n5.  임산부\n6.  다둥이 행복카드\n");
-		scanf("%d", &specialOffer);
-		
+		do
+		{
+			printf("\n우대사항을 선택하세요.\n1.  없음(나이 우대는 자동 처리)\n2.  장애인\n3.  국가유공자\n4.  휴가장병\n5.  임산부\n6.  다둥이 행복카드\n");
+			scanf("%d", &specialOffer);
+		} while(!(specialOffer == 1 || specialOffer == 2 || specialOffer == 3 || specialOffer == 4 || specialOffer == 5 || specialOffer == 6));
 		
 	// 오늘 날짜를  생년월일 형식으로 바꾸기 
 		todayDate = (t -> tm_year + 1900) * 10000 + (t -> tm_mon + 1) * 100 + t -> tm_mday; 	// *10000, *100 > 0을 뒤에 붙여 3월9일이 아닌 0309의 형태로 나오게 한다. 
@@ -78,101 +86,166 @@ int main()
 		// 36개월 이상 ~ 만 12세, 만 65세 이상 
 			if(age >= MIN_CHILD && age <= MAX_CHILD || age > MAX_ADULT)
 			{
-				if(ticketChoice == 1 && ticketTime == 1)
-				{
-					basicFee = FEE_CHILD_BOTH_1DAY; 	
-				}
+				if(ticketChoice == 1)
+					{
+						if(ticketTime == 1)
+						{
+							basicFee = FEE_CHILD_BOTH_1DAY; 	
+						}
 				
-				if(ticketChoice == 1 && ticketTime == 2)
-				{
-					basicFee = FEE_CHILD_BOTH_AFTER4;
-				}
+						else if(ticketTime == 2)
+						{
+							basicFee = FEE_CHILD_BOTH_AFTER4;
+						}
 				
-				if(ticketChoice == 2 && ticketTime == 1)
-				{
-					basicFee = FEE_CHILD_PARK_1DAY;
-				}
+					}
+				if(ticketChoice == 2)
+					{
+						if(ticketTime == 1)
+						{
+							basicFee = FEE_CHILD_PARK_1DAY;
+						}
 				
-				if(ticketChoice == 2 && ticketTime == 2)
-				{
-					basicFee = FEE_CHILD_PARK_AFTER4;
-				}
+						else if(ticketTime == 2)
+						{
+							basicFee = FEE_CHILD_PARK_AFTER4;
+						}
+					}
 			} 	
 			
 		// 만 13세 이상 ~ 만 18세	
 			if(age >= MIN_TEEN && age <= MAX_TEEN)
 			{
-				if(ticketChoice == 1 && ticketTime == 1)
-				{
-					basicFee = FEE_TEEN_BOTH_1DAY; 	
-				}
+				if(ticketChoice == 1)
+					{
+						if (ticketTime == 1)
+						{
+							basicFee = FEE_TEEN_BOTH_1DAY; 	
+						}
 				
-				if(ticketChoice == 1 && ticketTime == 2)
-				{
-					basicFee = FEE_TEEN_BOTH_AFTER4;
-				}
+						else if(ticketTime == 2)
+						{
+							basicFee = FEE_TEEN_BOTH_AFTER4;
+						}
+					}
 				
-				if(ticketChoice == 2 && ticketTime == 1)
-				{
-					basicFee = FEE_TEEN_PARK_1DAY;
-				}
+				if(ticketChoice == 2)
+					{ 
+						if(ticketTime == 1)
+						{
+							basicFee = FEE_TEEN_PARK_1DAY;
+						}
 				
-				if(ticketChoice == 2 && ticketTime == 2)
-				{
-					basicFee = FEE_TEEN_PARK_AFTER4;
-				}
-			} 	
+						else if(ticketTime == 2)
+						{
+							basicFee = FEE_TEEN_PARK_AFTER4;
+						}
+					}
+			}
 		
 		// 만 19세 이상 ~ 만 64세	
 			if(age >= MIN_ADULT && age <= MAX_ADULT)
 			{
-				if(ticketChoice == 1 && ticketTime == 1)
+				if(ticketChoice == 1)
 				{
-					basicFee = FEE_ADULT_BOTH_1DAY; 	
-				}
+					if(ticketTime == 1)
+					{
+						basicFee = FEE_ADULT_BOTH_1DAY; 	
+					}
 				
-				if(ticketChoice == 1 && ticketTime == 2)
+					else if(ticketTime == 2)
+					{
+						basicFee = FEE_ADULT_BOTH_AFTER4;
+					}
+			}
+				
+				if(ticketChoice == 2)
 				{
-					basicFee = FEE_ADULT_BOTH_AFTER4;
-				}
+					if(ticketTime == 1)
+					{
+						basicFee = FEE_ADULT_PARK_1DAY;
+					}
 				
-				if(ticketChoice == 2 && ticketTime == 1)
-				{
-					basicFee = FEE_ADULT_PARK_1DAY;
+					else if(ticketTime == 2)
+					{
+						basicFee = FEE_ADULT_PARK_AFTER4;
+					}
 				}
-				
-				if(ticketChoice == 2 && ticketTime == 2)
-				{
-					basicFee = FEE_ADULT_PARK_AFTER4;
-				}
-			} 	
-				
-	// 동반1인 조건 제외한 우대가격		
+			}
+			
+	//티켓 최종가격 계산				
+	// 우대조건 1. 나이 계산	
+		if(specialOffer == 1)
+		{
+			totalFee = basicFee * ticketAmount;
+		}
+	// 우대조건 2. 	장애인 - 종합이용권, 파크이용권 50% + 동반 1인까지 
 		if(specialOffer == 2)
 		{
-			basicFee *= DISCOUNT_RATE_DISABLED;
+			if(ticketAmount == 1)
+			{
+				totalFee = basicFee * DISCOUNT_RATE_DISABLED;
+			}
+			if(ticketAmount == 2)
+			{
+				totalFee = basicFee * DISCOUNT_RATE_DISABLED * 2;
+			}	
+			else
+			{
+				totalFee = (basicFee * DISCOUNT_RATE_DISABLED * 2) + (basicFee * (ticketAmount - 2));
+			}	
 		}
-		else if(specialOffer == 3)
+	// 우대조건 3. 국가유공자 - 종합이용권, 파크이용권 50% + 동반 1인까지	
+		if(specialOffer == 3)
 		{
-			basicFee *= DISCOUNT_RATE_MERIT;
+			if(ticketAmount == 1)
+			{
+				totalFee = basicFee * DISCOUNT_RATE_MERIT;
+			}
+			if(ticketAmount == 2)
+			{
+				totalFee = basicFee * DISCOUNT_RATE_MERIT * 2;
+			}
+			else
+			{
+				totalFee = (basicFee * DISCOUNT_RATE_MERIT * 2) + (basicFee * (ticketAmount -2));
+			}
 		}
-		else if(specialOffer == 4 && ticketChoice == 1)
+	// 우대조건 4. 휴가장병 - 종합이용권 49% + 동반 1인까지	
+		if(specialOffer == 4 && ticketChoice == 1)
 		{
-			basicFee *= DISCOUNT_RATE_SOLDIER; 
+			if(ticketAmount == 1)
+			{
+				totalFee = basicFee * DISCOUNT_RATE_SOLDIER; 
+			}
+			if(ticketAmount == 2)
+			{
+				totalFee = basicFee * DISCOUNT_RATE_SOLDIER * 2;
+			}
+			else
+			{
+				totalFee = (basicFee * DISCOUNT_RATE_SOLDIER * 2) + (basicFee * (ticketAmount -2));
+			}
 		}
-		else if(specialOffer == 5 && ticketChoice == 1)
+	// 우대조건 5. 임산부 - 종합이용권 50% + 본인만	
+		if(specialOffer == 5 && ticketChoice == 1)
 		{
-			basicFee *= DISCOUNT_RATE_PREGNANT;
+			if(ticketAmount == 1) 
+			{
+				totalFee = basicFee * DISCOUNT_RATE_PREGNANT;
+			}
+			else
+			{
+				totalFee = (basicFee * DISCOUNT_RATE_PREGNANT) + (basicFee * (ticketAmount-1));
+			}
 		} 
-		else if(specialOffer == 6 && ticketChoice == 1)
+	// 우대조건 6. 다둥이 행복카드 - 종합이용권  30% + 카드에 명기된 가족에 한함	
+		if(specialOffer == 6 && ticketChoice == 1)
 		{
-			basicFee *= DISCOUNT_RATE_FAMILY;
+			totalFee = basicFee * DISCOUNT_RATE_FAMILY * ticketAmount;
 		}
 
-	// 개수에 따른 요금 계산 		
-		totalFee = basicFee * ticketAmount;	
-	
-	// 티켓 가격 총합 출력 (무료인 경우 '무료 입장입니다')	
+	// 티켓 최종 가격 출력 (무료인 경우 '무료 입장입니다')	
 		if(totalFee == 0)
 		{
 			printf("\n무료 입장입니다.\n");
@@ -183,13 +256,18 @@ int main()
 		}
 		
 	// 티켓 구매 계속 진행 여부 확인	
-		printf("\n티켓을 계속 구매 하시겠습니까?\n1.  티켓 구매\n2.  종료\n");
-		scanf("%d", &againProcess);
+		do
+		{
+			printf("\n티켓을 계속 구매 하시겠습니까?\n1.  티켓 구매\n2.  종료\n");
+			scanf("%d", &againProcess);
+		} while (!(againProcess == 1 || againProcess == 2));
+		
 		if(againProcess == 2)
 		{
 			printf("\n티켓 구매를 종료합니다.  감사합니다.\n");
 			break; 
 		}
+		
 	
 	printf("\n");	// 가독성을 위해 한 줄 띄우기	
 		
