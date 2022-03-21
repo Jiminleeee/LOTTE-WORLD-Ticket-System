@@ -22,13 +22,15 @@
 	const float DISCOUNT_RATE_SOLDIER = 0.51, DISCOUNT_RATE_SOLDIER_WITH = 0.51;
 	const float DISCOUNT_RATE_PREGNANT = 0.5;
 	const float DISCOUNT_RATE_FAMILY = 0.7;
-	
-	int ticketChoice, ticketTime, personalNumber, ticketAmount, specialOffer, totalFee, againProcess;
-	int todayDate, age, basicFee;
+ 
+ //기타	
+	int ticketChoice, ticketTime, personalNumber, ticketAmount, specialOffer, againProcess;			 
+	int id, gender, century, birthYearFull, birthYear, birthMonth, birthDate, gap, age;					// 만 나이 계산 
+	int basicFee, totalFee;
 	 
 int main()
 {	
- // 오늘 날짜 구하기 
+ // 오늘 날짜 구하기  
 	time_t timer;
 	struct tm * t;
 	timer = time(NULL);			//1900년 1월 1일 0시 0분 0초부터 시작하여 현재까지의 초 
@@ -38,33 +40,67 @@ int main()
 	{
 		do
 		{
-			printf("권종을 선택하세요.\n1.  종합이용권(롯데월드 + 민속박물관)\n2.  파크이용권(롯데월드)\n");
+			printf("권종을 선택하세요.\n");
+			printf("1.  종합이용권(롯데월드 + 민속박물관)\n");
+			printf("2.  파크이용권(롯데월드)\n");
 			scanf("%d", &ticketChoice);
 		} while(!(ticketChoice == 1 || ticketChoice== 2)); 
 		
 		do
 		{
-			printf("\n이용시간을 선택하세요.\n1.  1Day\n2.  After4(오후 4시부터 입장)\n");
+			printf("\n이용시간을 선택하세요.\n");
+			printf("1.  1Day\n");
+			printf("2.  After4(오후 4시부터 입장)\n");
 			scanf("%d", &ticketTime); 
 		} while(!(ticketTime == 1 || ticketTime == 2));
 		
-		printf("\n생년월일을 입력하세요. 예) 20220316 \n");
-		scanf("%d", &personalNumber);
+		printf("\n주민등록 번호를 입력하세요. 예) 940907-2 \n");
+		scanf("%d-%d", &id, &gender);
 		
 		printf("\n몇 개를 주문하시겠습니까?\n");
 		scanf("%d", &ticketAmount); 
 		 
 		do
 		{
-			printf("\n우대사항을 선택하세요.\n1.  없음(나이 우대는 자동 처리)\n2.  장애인\n3.  국가유공자\n4.  휴가장병\n5.  임산부\n6.  다둥이 행복카드\n");
+			printf("\n우대사항을 선택하세요.\n");
+			printf("1.  없음(나이 우대는 자동 처리)\n");
+			printf("2.  장애인(장애인증 등 공식증빙 지참 고객 + 동반1인, 종합이용권/파크이용권 50%% 우대)\n");
+			printf("3.  국가유공자(국가유공자증 등 공식증빙 지참 고객+ 동반1인, 종합이용권/파크이용권 50%% 우대)\n");
+			printf("4.  휴가장병(휴가장병(의경,의무소방관,군무원 포함)공식증빙 지참 고객 + 동반1인, 종합이용권 49%% 우대)\n");
+			printf("5.  임산부(모자수첩 등 공식증빙 지참 임산부 본인, 종합이용권 50%% 우대)\n");
+			printf("6.  다둥이 행복카드(다둥이 행복카드 회원 본인(카드에 명기된 가족에 한함), 종합이용권 30%% 우대)\n");
 			scanf("%d", &specialOffer);
 		} while(!(specialOffer == 1 || specialOffer == 2 || specialOffer == 3 || specialOffer == 4 || specialOffer == 5 || specialOffer == 6));
 		
-	// 오늘 날짜를  생년월일 형식으로 바꾸기 
-		todayDate = (t -> tm_year + 1900) * 10000 + (t -> tm_mon + 1) * 100 + t -> tm_mday; 	// *10000, *100 > 0을 뒤에 붙여 3월9일이 아닌 0309의 형태로 나오게 한다. 
 	
 	//만 나이 계산
-		age = (todayDate - personalNumber)/10000; 
+		birthYear = id / 10000;					//자료형이 int라서 981216 > 98.1216 > 98
+		birthMonth = (id % 10000) / 100; 		// 981216 > 1216 > 12.16 > 12
+		birthDate = id % 100;					// 981216 > 9812.16 > 16
+	
+		switch(gender)
+		{					
+			case 1: case 2:
+				century = 1900;								  
+				birthYearFull = birthYear + century;
+				break;
+			 
+			case 3: case 4:
+				century = 2000;								
+				birthYearFull = birthYear + century;
+				break;	
+		}
+	//현재년도 - 출생년도 
+		gap = (t -> tm_year +1900) - birthYearFull;										// 현재 년도에서 출생년도를 뺀다  // tm_year : 1900년 이후 지금이 몇 년인지를 나타냄 
+	
+		if(birthMonth >= (t -> tm_mon+1) && birthDate >= (t -> tm_mday))				// tm_mon : 0 ~ 11 > +1을 해야 함 // tm_mday : 1 ~ 31 > 그대로 사용  
+		{
+			age = gap;																	// 생일이 지났으면 현재 년도에서 출생년도를 뺀만큼이 만 나이
+		}
+		else
+		{
+			age = gap - 1;																// 생일이 지나지 않았으면 현재 년도에서 출생년도를 뺀 것에 -1을 해야 만 나이 
+		}
 	
 	// 연령대별 분류에 따른 기본 티켓값 
 		// 0 ~ 12개월 미만 
@@ -179,6 +215,7 @@ int main()
 		{
 			totalFee = basicFee * ticketAmount;
 		}
+		
 	// 우대조건 2. 	장애인 - 종합이용권, 파크이용권 50% + 동반 1인까지 
 		if(specialOffer == 2)
 		{
@@ -188,13 +225,14 @@ int main()
 			}
 			if(ticketAmount == 2)
 			{
-				totalFee = basicFee * DISCOUNT_RATE_DISABLED * 2;
+				totalFee = basicFee * DISCOUNT_RATE_DISABLED + basicFee * DISCOUNT_RATE_DISABLED_WITH;
 			}	
 			else
 			{
-				totalFee = (basicFee * DISCOUNT_RATE_DISABLED * 2) + (basicFee * (ticketAmount - 2));
+				totalFee = (basicFee * DISCOUNT_RATE_DISABLED + basicFee * DISCOUNT_RATE_DISABLED_WITH) + (basicFee * (ticketAmount - 2));
 			}	
 		}
+		
 	// 우대조건 3. 국가유공자 - 종합이용권, 파크이용권 50% + 동반 1인까지	
 		if(specialOffer == 3)
 		{
@@ -204,13 +242,14 @@ int main()
 			}
 			if(ticketAmount == 2)
 			{
-				totalFee = basicFee * DISCOUNT_RATE_MERIT * 2;
+				totalFee = basicFee * DISCOUNT_RATE_MERIT + basicFee * DISCOUNT_RATE_MERIT_WITH;
 			}
 			else
 			{
-				totalFee = (basicFee * DISCOUNT_RATE_MERIT * 2) + (basicFee * (ticketAmount -2));
+				totalFee = (basicFee * DISCOUNT_RATE_MERIT + basicFee * DISCOUNT_RATE_MERIT_WITH) + (basicFee * (ticketAmount -2));
 			}
 		}
+		
 	// 우대조건 4. 휴가장병 - 종합이용권 49% + 동반 1인까지	
 		if(specialOffer == 4 && ticketChoice == 1)
 		{
@@ -220,13 +259,14 @@ int main()
 			}
 			if(ticketAmount == 2)
 			{
-				totalFee = basicFee * DISCOUNT_RATE_SOLDIER * 2;
+				totalFee = basicFee * DISCOUNT_RATE_SOLDIER + basicFee * DISCOUNT_RATE_SOLDIER_WITH;
 			}
 			else
 			{
-				totalFee = (basicFee * DISCOUNT_RATE_SOLDIER * 2) + (basicFee * (ticketAmount -2));
+				totalFee = (basicFee * DISCOUNT_RATE_SOLDIER + basicFee * DISCOUNT_RATE_SOLDIER_WITH) + (basicFee * (ticketAmount -2));
 			}
 		}
+		
 	// 우대조건 5. 임산부 - 종합이용권 50% + 본인만	
 		if(specialOffer == 5 && ticketChoice == 1)
 		{
@@ -239,6 +279,7 @@ int main()
 				totalFee = (basicFee * DISCOUNT_RATE_PREGNANT) + (basicFee * (ticketAmount-1));
 			}
 		} 
+		
 	// 우대조건 6. 다둥이 행복카드 - 종합이용권  30% + 카드에 명기된 가족에 한함	
 		if(specialOffer == 6 && ticketChoice == 1)
 		{
