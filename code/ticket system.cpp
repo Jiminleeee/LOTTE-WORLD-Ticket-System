@@ -17,9 +17,9 @@
 	const int MIN_ADULT = 19, MAX_ADULT = 64;	
 
  //할인율
-	const float DISCOUNT_RATE_DISABLED = 0.5, DISCOUNT_RATE_DISABLED_WITH = 0.5;
-	const float DISCOUNT_RATE_MERIT = 0.5, DISCOUNT_RATE_MERIT_WITH = 0.5; 
-	const float DISCOUNT_RATE_SOLDIER = 0.51, DISCOUNT_RATE_SOLDIER_WITH = 0.51;
+	const float DISCOUNT_RATE_DISABLED = 0.5;
+	const float DISCOUNT_RATE_MERIT = 0.5; 
+	const float DISCOUNT_RATE_SOLDIER = 0.51;
 	const float DISCOUNT_RATE_PREGNANT = 0.5;
 	const float DISCOUNT_RATE_FAMILY = 0.7;
  
@@ -227,11 +227,11 @@ int main()
 			}
 			else if(ticketAmount == 2)
 			{
-				totalFee = basicFee * DISCOUNT_RATE_DISABLED + basicFee * DISCOUNT_RATE_DISABLED_WITH;
+				totalFee = basicFee * DISCOUNT_RATE_DISABLED * 2;
 			}	
 			else
 			{
-				totalFee = (basicFee * DISCOUNT_RATE_DISABLED + basicFee * DISCOUNT_RATE_DISABLED_WITH) + (basicFee * (ticketAmount - 2));
+				totalFee = (basicFee * DISCOUNT_RATE_DISABLED * 2) + (basicFee * (ticketAmount - 2));
 			}	
 		}
 		
@@ -244,11 +244,11 @@ int main()
 			}
 			else if(ticketAmount == 2)
 			{
-				totalFee = basicFee * DISCOUNT_RATE_MERIT + basicFee * DISCOUNT_RATE_MERIT_WITH;
+				totalFee = basicFee * DISCOUNT_RATE_MERIT * 2;
 			}
 			else
 			{
-				totalFee = (basicFee * DISCOUNT_RATE_MERIT + basicFee * DISCOUNT_RATE_MERIT_WITH) + (basicFee * (ticketAmount -2));
+				totalFee = (basicFee * DISCOUNT_RATE_MERIT * 2) + (basicFee * (ticketAmount -2));
 			}
 		}
 		
@@ -261,11 +261,11 @@ int main()
 			}
 			else if(ticketAmount == 2)
 			{
-				totalFee = basicFee * DISCOUNT_RATE_SOLDIER + basicFee * DISCOUNT_RATE_SOLDIER_WITH;
+				totalFee = basicFee * DISCOUNT_RATE_SOLDIER * 2;
 			}
 			else
 			{
-				totalFee = (basicFee * DISCOUNT_RATE_SOLDIER + basicFee * DISCOUNT_RATE_SOLDIER_WITH) + (basicFee * (ticketAmount -2));
+				totalFee = (basicFee * DISCOUNT_RATE_SOLDIER * 2) + (basicFee * (ticketAmount -2));
 			}
 		}
 		
@@ -322,7 +322,7 @@ int main()
 			
 	// 티켓 구매 내역 출력 
 			printf("\n====================== 롯데월드 ======================\n");
-			
+			printf("   권종     시간    연령     수량     금액       우대조건\n\n");
 			for(int index = 0; index < position; index++)
 			{
 			// 입장권 종류	
