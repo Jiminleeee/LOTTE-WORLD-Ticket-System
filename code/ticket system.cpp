@@ -27,8 +27,9 @@
 	int ticketChoice, ticketTime, personalNumber, ticketAmount, specialOffer, againProcess;			 
 	int id, gender, century, birthYearFull, birthYear, birthMonth, birthDate, gap, age;					// 만 나이 계산 
 	int basicFee, totalFee, finalFee;
-	int orderList[100][6] = {0};	// 주문 내역 저장 
+	int ticketChoiceArr[100]={0}, ticketTimeArr[100]={0}, ageArr[100]={0}, ticketAmountArr[100]={0}, totalFeeArr[100]={0}, specialOfferArr[100]={0};	// 주문 내역 저장 
 	int position;	// 배열에서 활용 
+	int continueBuying;
 	 
 int main()
 {	
@@ -37,9 +38,14 @@ int main()
 	struct tm * t;
 	timer = time(NULL);			//1900년 1월 1일 0시 0분 0초부터 시작하여 현재까지의 초 
 	t = localtime(&timer); 		// 포맷팅을 위해 구조체에 넣음  
+
 	
 	while(true)
-	{
+	{ 
+	 do		//티켓 구매 과정 
+	 {
+	
+	 
 		do
 		{
 			printf("권종을 선택하세요.\n");
@@ -90,8 +96,12 @@ int main()
 			case 3: case 4:
 				century = 2000;								
 				birthYearFull = birthYear + century;
-				break;	
+				break;
+				
+			default:
+			break;	
 		}
+	
 	//현재년도 - 출생년도 
 		gap = (t -> tm_year +1900) - birthYearFull;		// 현재 년도에서 출생년도를 뺀다  // tm_year : 1900년 이후 지금이 몇 년인지를 나타냄 
 	
@@ -106,113 +116,103 @@ int main()
 	
 	// 연령대별 분류에 따른 기본 티켓값 
 		// 0 ~ 12개월 미만 
-			if(age < MIN_BABY)
-			{
-				basicFee = 0;
-			}
+		if(age < MIN_BABY)
+		{
+			basicFee = 0;
+		}
 		
 		// 12개월 이상 ~ 36개월 미만
-			if(age >= MIN_BABY && age < MIN_CHILD && ticketAmount > 10)		// 단체 입장인 경우에만 입장료 있음(단체 기준은 임의로 10명 초과로 정함) 
-			{
-				basicFee = FEE_BABY;
-			}
-			else if(age >= MIN_BABY && age < MIN_CHILD && ticketAmount <= 10)	// 단체 입장이 아닌 경우 무료 입장 
-			{
-				basicFee = 0;
-			}	
+		if(age >= MIN_BABY && age < MIN_CHILD && ticketAmount > 10)		// 단체 입장인 경우에만 입장료 있음(단체 기준은 임의로 10명 초과로 정함) 
+		{
+			basicFee = FEE_BABY;
+		}
+		else if(age >= MIN_BABY && age < MIN_CHILD && ticketAmount <= 10)	// 단체 입장이 아닌 경우 무료 입장 
+		{
+			basicFee = 0;
+		}	
 			
 		// 36개월 이상 ~ 만 12세, 만 65세 이상 
-			if(age >= MIN_CHILD && age <= MAX_CHILD || age > MAX_ADULT)
-			{
-				if(ticketChoice == 1)
-					{
-						if(ticketTime == 1)
-						{
-							basicFee = FEE_CHILD_BOTH_1DAY; 	
-						}
-				
-						else if(ticketTime == 2)
-						{
-							basicFee = FEE_CHILD_BOTH_AFTER4;
-						}
-				
-					}
-				if(ticketChoice == 2)
-					{
-						if(ticketTime == 1)
-						{
-							basicFee = FEE_CHILD_PARK_1DAY;
-						}
-				
-						else if(ticketTime == 2)
-						{
-							basicFee = FEE_CHILD_PARK_AFTER4;
-						}
-					}
-			} 	
-			
-		// 만 13세 이상 ~ 만 18세	
-			if(age >= MIN_TEEN && age <= MAX_TEEN)
-			{
-				if(ticketChoice == 1)
-					{
-						if (ticketTime == 1)
-						{
-							basicFee = FEE_TEEN_BOTH_1DAY; 	
-						}
-				
-						else if(ticketTime == 2)
-						{
-							basicFee = FEE_TEEN_BOTH_AFTER4;
-						}
-					}
-				
-				if(ticketChoice == 2)
-					{ 
-						if(ticketTime == 1)
-						{
-							basicFee = FEE_TEEN_PARK_1DAY;
-						}
-				
-						else if(ticketTime == 2)
-						{
-							basicFee = FEE_TEEN_PARK_AFTER4;
-						}
-					}
-			}
-		
-		// 만 19세 이상 ~ 만 64세	
-			if(age >= MIN_ADULT && age <= MAX_ADULT)
-			{
-				if(ticketChoice == 1)
+		if(age >= MIN_CHILD && age <= MAX_CHILD || age > MAX_ADULT)
+		{
+			if(ticketChoice == 1)	 
 				{
 					if(ticketTime == 1)
 					{
-						basicFee = FEE_ADULT_BOTH_1DAY; 	
+						basicFee = FEE_CHILD_BOTH_1DAY; 	
 					}
-				
 					else if(ticketTime == 2)
 					{
-						basicFee = FEE_ADULT_BOTH_AFTER4;
-					}
-			}
-				
-				if(ticketChoice == 2)
-				{
-					if(ticketTime == 1)
-					{
-						basicFee = FEE_ADULT_PARK_1DAY;
-					}
-				
-					else if(ticketTime == 2)
-					{
-						basicFee = FEE_ADULT_PARK_AFTER4;
+						basicFee = FEE_CHILD_BOTH_AFTER4;
 					}
 				}
+			if(ticketChoice == 2)
+				{
+					if(ticketTime == 1)
+					{
+						basicFee = FEE_CHILD_PARK_1DAY;
+					}
+					else if(ticketTime == 2)
+					{
+						basicFee = FEE_CHILD_PARK_AFTER4;
+					}
+				}
+		} 				
+		// 만 13세 이상 ~ 만 18세	
+		if(age >= MIN_TEEN && age <= MAX_TEEN)
+		{
+			if(ticketChoice == 1)
+			{
+				if (ticketTime == 1)
+				{
+					basicFee = FEE_TEEN_BOTH_1DAY; 	
+				}
+				else if(ticketTime == 2)
+				{
+					basicFee = FEE_TEEN_BOTH_AFTER4;
+				}
 			}
+			if(ticketChoice == 2)
+			{ 
+				if(ticketTime == 1)
+				{
+					basicFee = FEE_TEEN_PARK_1DAY;
+				}
+				else if(ticketTime == 2)
+				{
+					basicFee = FEE_TEEN_PARK_AFTER4;
+				}
+			}
+		}
+		
+		// 만 19세 이상 ~ 만 64세	
+		if(age >= MIN_ADULT && age <= MAX_ADULT)
+		{
+			if(ticketChoice == 1)
+			{
+				if(ticketTime == 1)
+				{
+					basicFee = FEE_ADULT_BOTH_1DAY; 	
+				}
+				else if(ticketTime == 2)
+				{
+					basicFee = FEE_ADULT_BOTH_AFTER4;
+				}
+			}
+			if(ticketChoice == 2)
+			{
+				if(ticketTime == 1)
+				{
+					basicFee = FEE_ADULT_PARK_1DAY;
+				}
+				else if(ticketTime == 2)
+				{
+					basicFee = FEE_ADULT_PARK_AFTER4;
+				}
+			}
+		}
 			
 	//티켓 최종가격 계산				
-	// 우대조건 1. 나이 계산	
+		// 우대조건 1. 나이 계산	
 		if(specialOffer == 1)
 		{
 			totalFee = basicFee * ticketAmount;
@@ -295,120 +295,140 @@ int main()
 		}
 		else
 		{
-		printf("\n가격은 %d 원 입니다.\n감사합니다.\n", totalFee);
+			printf("\n가격은 %d 원 입니다.\n감사합니다.\n", totalFee);
 		}
 		
-	// 티켓 구매 내역 저장 
-		orderList[position][0] = ticketChoice;
-		orderList[position][1] = ticketTime;
-		orderList[position][2] = age;
-		orderList[position][3] = ticketAmount;
-		orderList[position][4] = totalFee;
-		orderList[position][5] = specialOffer;
+	// 티켓 구매 내역 저장 (배열) 
+		ticketChoiceArr[position] = ticketChoice;
+		ticketTimeArr[position] = ticketTime;
+		ageArr[position] = age;
+		ticketAmountArr[position] = ticketAmount;
+		totalFeeArr[position] = totalFee;
+		specialOfferArr[position] = specialOffer;
 		position++;
+		
 	// 티켓 구매 내역의 최종 금액 
 	finalFee += totalFee;
 		
 	// 티켓 구매 계속 진행 여부 확인	
-		do
-		{
-			printf("\n티켓을 계속 구매 하시겠습니까?\n1.  티켓 구매\n2.  종료\n");
-			scanf("%d", &againProcess);
-		} while (!(againProcess == 1 || againProcess == 2));
 		
-		if(againProcess == 2)
-		{
-			printf("\n티켓 구매를 종료합니다.  감사합니다.\n");
-			
-	// 티켓 구매 내역 출력 
-			printf("\n====================== 롯데월드 ======================\n");
-			printf("   권종     시간    연령     수량     금액       우대조건\n\n");
-			for(int index = 0; index < position; index++)
+		printf("\n티켓을 계속 구매 하시겠습니까?\n1.  티켓 구매\n2.  종료\n");
+		scanf("%d", &againProcess);
+	 
+	 } while (againProcess == 1);		// 1. 티켓 구매 선택시 티켓 구매 과정 다시 진행 
+		
+		
+		
+		printf("\n티켓 구매를 종료합니다.  감사합니다.\n");
+		
+	
+	//매출 파일 만들기	
+		FILE * filePointer = fopen("report.csv","a");
+	
+	
+	// 티켓 구매 영수증 출력 
+		printf("\n====================== 롯데월드 ======================\n");
+		printf("   권종     시간    연령     수량     금액       우대조건\n\n");
+		for(int index = 0; index < position; index++)
+		{//매출 파일 출력 
+			fprintf(filePointer, "%d,%d,%d,%d,%d,%d,%d,%d,%d\n",t-> tm_year + 1900, t-> tm_mon + 1, t -> tm_mday,
+																ticketChoiceArr[index], ticketTimeArr[index], ageArr[index], 
+																ticketAmountArr[index], totalFeeArr[index], specialOfferArr[index]);	
+		// 입장권 종류	
+			switch(ticketChoiceArr[index])
 			{
-			// 입장권 종류	
-				switch(orderList[index][0])
-				{
-					case 1:
-						printf("종합이용권  ");
-						break; 
-					case 2:
-						printf("파크이용권  ");
-						break;
-				}
-			// 입장권 시간	
-				switch(orderList[index][1])
-				{
-					case 1: 
-						printf("1Day    ");
-						break;
-					case 2:
-						printf("After4  ");
-						break; 
-				}
-			// 나이 구분	
-				if(orderList[index][2] < 3)
-				{
-					printf("베이비  ");
-				}
-				else if(orderList[index][2] < 12)
-				{
-					printf("어린이  ");
-				}
-				else if(orderList[index][2] < 18)
-				{
-					printf("청소년  ");
-				}
-				else if(orderList[index][2] < 65) 
-				{
-					printf("어른    ");
-				}
-				else
-				{
-					printf("노인    ");
-				}				
-			// 티켓 수량
-				printf("%3d   ", orderList[index][3]);	
-			// 총 금액
-				printf("%8d원   ", orderList[index][4]);
-			// 우대조건 
-				switch(orderList[index][5])
-				{
-					case 1:
-						printf("우대조건 없음\n");
-						break;
-					case 2:
-						printf("장애인 우대\n");
-						break;
-					case 3:
-						printf("국가유공자 우대\n");
-						break;
-					case 4:
-						printf("휴가장병 우대\n");
-						break;
-					case 5:
-						printf("임산부 우대\n");
-						break;
-					case 6:
-						printf("다둥이 행복카드 우대\n");
-						break;
-				}
-			
-				
+				case 1:
+					printf("종합이용권  ");
+					break; 
+				case 2:
+					printf("파크이용권  ");
+					break;
 			}
-				
-			printf("\n\n입장료 총액은 %d원 입니다.\n", finalFee);
-			printf("=======================================================");
-			break; 
-			
+		// 입장권 시간	
+			switch(ticketTimeArr[index])
+			{
+				case 1: 
+					printf("1Day    ");
+					break;
+				case 2:
+					printf("After4  ");
+					break; 
+			}
+		// 나이 구분	
+			if(ageArr[index] < 3)
+			{
+				printf("베이비  ");
+			}
+			else if(ageArr[index] < 12)
+			{
+				printf("어린이  ");
+			}
+			else if(ageArr[index] < 18)
+			{
+				printf("청소년  ");
+			}
+			else if(ageArr[index] < 65) 
+			{
+				printf("어른    ");
+			}
+			else
+			{
+				printf("노인    ");
+			}				
+		// 티켓 수량
+			printf("%3d   ", ticketAmountArr[index]);	
+		// 총 금액
+			printf("%8d원   ", totalFeeArr[index]);
+		// 우대조건 
+			switch(specialOfferArr[index])
+			{
+				case 1:
+					printf("우대조건 없음\n");
+					break;
+				case 2:
+					printf("장애인 우대\n");
+					break;
+				case 3:
+					printf("국가유공자 우대\n");
+					break;
+				case 4:
+					printf("휴가장병 우대\n");
+					break;
+				case 5:
+					printf("임산부 우대\n");
+					break;
+				case 6:
+					printf("다둥이 행복카드 우대\n");
+					break;
+			}
+	
 		}
+		printf("\n\n입장료 총액은 %d원 입니다.\n", finalFee);
+		printf("=======================================================");
 		
 	
-	printf("\n");	// 가독성을 위해 한 줄 띄우기	
-	
+		 
+		// 새로운 티켓 구매 or 프로그램 종료 
+		printf("\n\n계속 발권하시겠습니까?\n");
+		printf("1. 새로운 주문\n2. 프로그램  종료\n");	
+		scanf("%d", &continueBuying);
+		
+		//새로운 구매 진행시 기존 정보 초기화 
+		position = 0;	
+		finalFee = 0;
 	
 		
-	}	
+		if(continueBuying == 1)
+		{	
+			continue;
+		}
+			
+			
+		break;	
 		
+    	printf("\n");	//가독성 위해 한 줄 띄어쓰기 
+	}
+
 	return 0;	
 }
 	
