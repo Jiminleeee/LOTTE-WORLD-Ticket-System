@@ -28,7 +28,7 @@
 	int id, gender, century, birthYearFull, birthYear, birthMonth, birthDate, gap, age;					// 만 나이 계산 
 	int basicFee, totalFee, finalFee;
 	int ticketChoiceArr[100]={0}, ticketTimeArr[100]={0}, ageArr[100]={0}, ticketAmountArr[100]={0}, totalFeeArr[100]={0}, specialOfferArr[100]={0};	// 주문 내역 저장 
-	int position;	// 배열에서 활용 
+	int count;	// 배열에서 활용 
 	int continueBuying;
 	 
 int main()
@@ -299,13 +299,13 @@ int main()
 		}
 		
 	// 티켓 구매 내역 저장 (배열) 
-		ticketChoiceArr[position] = ticketChoice;
-		ticketTimeArr[position] = ticketTime;
-		ageArr[position] = age;
-		ticketAmountArr[position] = ticketAmount;
-		totalFeeArr[position] = totalFee;
-		specialOfferArr[position] = specialOffer;
-		position++;
+		ticketChoiceArr[count] = ticketChoice;
+		ticketTimeArr[count] = ticketTime;
+		ageArr[count] = age;
+		ticketAmountArr[count] = ticketAmount;
+		totalFeeArr[count] = totalFee;
+		specialOfferArr[count] = specialOffer;
+		count++;
 		
 	// 티켓 구매 내역의 최종 금액 
 	finalFee += totalFee;
@@ -328,8 +328,8 @@ int main()
 	
 	// 티켓 구매 영수증 출력 
 		printf("\n====================== 롯데월드 ======================\n");
-		printf("   권종     시간    연령     수량     금액       우대조건\n\n");
-		for(int index = 0; index < position; index++)
+		printf("   권종     시간    연령     수량     가격       우대조건\n\n");
+		for(int index = 0; index < count; index++)
 		{//매출 파일 출력 
 			fprintf(filePointer, "%d,%d,%d,%d,%d,%d,%d,%d,%d\n",t-> tm_year + 1900, t-> tm_mon + 1, t -> tm_mday,
 																ticketChoiceArr[index], ticketTimeArr[index], ageArr[index], 
@@ -359,11 +359,11 @@ int main()
 			{
 				printf("베이비  ");
 			}
-			else if(ageArr[index] < 12)
+			else if(ageArr[index] < 13)
 			{
 				printf("어린이  ");
 			}
-			else if(ageArr[index] < 18)
+			else if(ageArr[index] < 19)
 			{
 				printf("청소년  ");
 			}
@@ -377,7 +377,7 @@ int main()
 			}				
 		// 티켓 수량
 			printf("%3d   ", ticketAmountArr[index]);	
-		// 총 금액
+		// 총 가격 
 			printf("%8d원   ", totalFeeArr[index]);
 		// 우대조건 
 			switch(specialOfferArr[index])
@@ -414,7 +414,7 @@ int main()
 		scanf("%d", &continueBuying);
 		
 		//새로운 구매 진행시 기존 정보 초기화 
-		position = 0;	
+		count = 0;	
 		finalFee = 0;
 	
 		
