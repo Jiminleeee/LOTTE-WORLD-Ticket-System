@@ -107,36 +107,11 @@ int main()
 	
 	fclose(filePointer1);
 
-/* 일자별 매출 현황
+//일자별 매출 현황
 	printf("=============일자별 매출 현황 ===============\n");
- 	for(int index = 0; index < count; index++)
- 	{
-	 	if(date[index] != date[index++])
-		{
-			totalFeeDayList[index] += totalFeeArr[index];
-	 	}
-		printf("%d년 %d월 %d일 : 총 매출 %d원\n", year[index], month[index], date[index], totalFeeDayList[index]);
-	}
-	
-	for(int index = 0; index <= count; index++)
-	{
-	
-			if(date[index] != date[index+1])
-			{
-				totalFeeDayList[index] = totalFeeArr[index];
-				
-			}
-			
-			else if(date[index] = date[index+1])
-			{
-				totalFeeDayList[index+1] = totalFeeArr[index+1] + totalFeeArr[index];
-				
-			}
-			printf("%d\n", totalFeeDayList[index]);
-		
-	}		
-*/	
-	for(int index = 0; index < count; index++)
+ 	FILE * filePointer2 = fopen("Dailydata.csv", "w");
+ 	fprintf(fp,"년,월,일, 총 매출\n");
+	 for(int index = 0; index < count; index++)
 	{
 	
 		day = date[index];
@@ -164,9 +139,16 @@ int main()
 		
 			printf("%d년 %d월 %d일 : 총 매출  %d원\n", year[index], month[index], date[index], totalFeeDayList[datePosition][1]);		
 		}
+		
+		
+		
+		fprintf(fp, "%d,%d,%d,%d\n", year[index], month[index], date[index], totalFeeDayList[datePosition][1]);
+		
 	}	
-
 	printf("--------------------------------------------------------\n\n\n");
+	fclose(filePointer2);
+	
+	
 	
 
 // 우대권 판매 현황
