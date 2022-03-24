@@ -5,7 +5,7 @@ int main()
 	const int MAX = 100;
 	int count = 0;
 	int year[MAX], month[MAX], date[MAX], ticketChoiceArr[MAX], ticketTimeArr[MAX], ageArr[MAX], ticketAmountArr[MAX], totalFeeArr[MAX], specialOfferArr[MAX]={0};	
-	int ticketTimeList[MAX]={0}, age1DayList[MAX]={0}, ageAfter4List[MAX]={0}, totalFeeList[MAX]={0}, specialOfferList[MAX]={0}, dateSaleList[MAX]={0}, totalFeeDayList[MAX][MAX]={0};
+	int ticketTimeList[MAX]={0}, age1DayList[MAX]={0}, ageAfter4List[MAX]={0}, totalFeeList[MAX]={0}, specialOfferList[MAX]={0},  totalFeeDayList[MAX][MAX]={0};
 	int day,datePosition;
 
 	while(fscanf (fp, "%d,%d,%d,%d,%d,%d,%d,%d,%d", &year[count], &month[count], &date[count], &ticketChoiceArr[count], &ticketTimeArr[count], 
@@ -96,6 +96,7 @@ int main()
 	printf("-------------------------------------------------------------------\n\n\n");
 //권종별 매출 파일 출력 
 	FILE * filePointer1 = fopen("Ticketdata.csv", "w");
+	
 	fprintf(fp, "구분,주간권,야간권\n");
 	fprintf(fp, "베이비, %d,%d\n", age1DayList[0], ageAfter4List[0]);
 	fprintf(fp, "어린이, %d,%d\n", age1DayList[1], ageAfter4List[1]);
@@ -109,38 +110,39 @@ int main()
 
 //일자별 매출 현황
 	printf("=============일자별 매출 현황 ===============\n");
- 	FILE * filePointer2 = fopen("Dailydata.csv", "w");
+ 	//파일 출력 
+	 FILE * filePointer2 = fopen("Dailydata.csv", "w");
  	fprintf(fp,"년,월,일, 총 매출\n");
-	 for(int index = 0; index < count; index++)
+	
+	for(int index = 0; index < count; index++)
 	{
 	
 		day = date[index];
 		if(index == 0)
 		{
-			totalFeeDayList[datePosition][0] = day;
-			totalFeeDayList[datePosition][1] += totalFeeArr[index];
+			totalFeeDayList[datePosition][0] = day;						//datePosition = 0 > (0,0)에 날짜를 하나 놓는다 
+			totalFeeDayList[datePosition][1] += totalFeeArr[index];		// (0,1)에 입장권 총액을 더한 값을 출력 
 		}
-		else if(date[index] == date[index-1])	
+	
+		else if(date[index] == date[index-1])							// 날짜가 이전의 것과 같으면 (0,1)에 입장권 총액을 한번 더 더한다 
 		{
 			totalFeeDayList[datePosition][1] += totalFeeArr[index];
 		}
 		else
 		{
-			datePosition++;
-			totalFeeDayList[datePosition][0] = day;
-			totalFeeDayList[datePosition][1] += totalFeeArr[index];
+			datePosition++;												// 그 외의 경우에는 (1,0)에 새로운 날짜 
+			totalFeeDayList[datePosition][0] = day;						
+			totalFeeDayList[datePosition][1] += totalFeeArr[index];		// (1,1) > 그 날의 입장권 총액 
 		}
 		if(date[index] == date[index+1])
-		{
+		{																// 날짜가 다음날 과 같으면 출력 x > 다른 경우만 출력 
 			continue;
 		}
 		else
 		{
 		
-			printf("%d년 %d월 %d일 : 총 매출  %d원\n", year[index], month[index], date[index], totalFeeDayList[datePosition][1]);		
+			printf("%d년 %02d월 %02d일 : 총 매출  %6d원\n", year[index], month[index], date[index], totalFeeDayList[datePosition][1]);		
 		}
-		
-		
 		
 		fprintf(fp, "%d,%d,%d,%d\n", year[index], month[index], date[index], totalFeeDayList[datePosition][1]);
 		
@@ -183,17 +185,18 @@ int main()
 			specialOfferList[6] += ticketAmountArr[index];
 		}
 	}
-	printf("총 판매 티켓 수 	:  	%d매\n", specialOfferList[0]);
-	printf("우대 없음       	:  	%d매\n", specialOfferList[1]); 
-	printf("장애인          	:  	%d매\n",specialOfferList[2]);
-	printf("국가유공자      	:  	%d매\n", specialOfferList[3]); 
-	printf("휴가 장병       	:  	%d매\n", specialOfferList[4]); 
-	printf("임산부          	:  	%d매\n", specialOfferList[5]); 
-	printf("다둥이 행복카드 	:	%d매\n",specialOfferList[6]);
+	printf("총 판매 티켓 수 	:  	%3d매\n", specialOfferList[0]);
+	printf("우대 없음       	:  	%3d매\n", specialOfferList[1]); 
+	printf("장애인          	:  	%3d매\n",specialOfferList[2]);
+	printf("국가유공자      	:  	%3d매\n", specialOfferList[3]); 
+	printf("휴가 장병       	:  	%3d매\n", specialOfferList[4]); 
+	printf("임산부          	:  	%3d매\n", specialOfferList[5]); 
+	printf("다둥이 행복카드 	:	%3d매\n",specialOfferList[6]);
 	printf("------------------------------------------------\n\n\n");
 
 //우대권 판매 현황 파일 출력
 	FILE * filePointer3 = fopen("special offer.csv", "w");
+
 	fprintf(fp, "구분, 우대권\n");
 	fprintf(fp,"우대없음, %d\n", specialOfferList[1]); 
 	fprintf(fp,"장애인, %d\n", specialOfferList[2]);
@@ -202,6 +205,7 @@ int main()
 	fprintf(fp,"임산부, %d\n", specialOfferList[5]);
 	fprintf(fp,"다둥이 행복카드, %d\n", specialOfferList[6]);     
 	fprintf(fp,"합계, %d\n", specialOfferList[0]); 
+
 	fclose(filePointer3);
 	return 0;
 } 
