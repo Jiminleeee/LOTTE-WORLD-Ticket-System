@@ -4,24 +4,21 @@
 // 기본 변수 정의
 
  //권종별 가격
- 	const int FEE_BABY = 15000;
-	const int FEE_ADULT_BOTH_1DAY = 59000, FEE_TEEN_BOTH_1DAY = 52000, FEE_CHILD_BOTH_1DAY = 47000;
-	const int FEE_ADULT_BOTH_AFTER4 = 48000, FEE_TEEN_BOTH_AFTER4 = 42000, FEE_CHILD_BOTH_AFTER4 = 36000;
-	const int FEE_ADULT_PARK_1DAY = 56000, FEE_TEEN_PARK_1DAY = 50000, FEE_CHILD_PARK_1DAY = 46000;
-	const int FEE_ADULT_PARK_AFTER4 = 45000, FEE_TEEN_PARK_AFTER4 = 40000, FEE_CHILD_PARK_AFTER4 = 35000; 
+ 	const int FEE_BABY = 15000,
+			  FEE_ADULT_BOTH_1DAY = 59000, FEE_TEEN_BOTH_1DAY = 52000, FEE_CHILD_BOTH_1DAY = 47000,
+			  FEE_ADULT_BOTH_AFTER4 = 48000, FEE_TEEN_BOTH_AFTER4 = 42000, FEE_CHILD_BOTH_AFTER4 = 36000,
+			  FEE_ADULT_PARK_1DAY = 56000, FEE_TEEN_PARK_1DAY = 50000, FEE_CHILD_PARK_1DAY = 46000,
+			  FEE_ADULT_PARK_AFTER4 = 45000, FEE_TEEN_PARK_AFTER4 = 40000, FEE_CHILD_PARK_AFTER4 = 35000; 
 	
  //나이에 따른 범위
-	const int MIN_BABY = 1; 
-	const int MIN_CHILD = 3, MAX_CHILD = 12;
-	const int MIN_TEEN = 13, MAX_TEEN = 18;
-	const int MIN_ADULT = 19, MAX_ADULT = 64;	
+	const int MIN_BABY = 1,
+			  MIN_CHILD = 3, MAX_CHILD = 12,
+			  MIN_TEEN = 13, MAX_TEEN = 18,
+			  MIN_ADULT = 19, MAX_ADULT = 64;	
 
  //할인율
-	const float DISCOUNT_RATE_DISABLED = 0.5;
-	const float DISCOUNT_RATE_MERIT = 0.5; 
-	const float DISCOUNT_RATE_SOLDIER = 0.51;
-	const float DISCOUNT_RATE_PREGNANT = 0.5;
-	const float DISCOUNT_RATE_FAMILY = 0.7;
+	const float DISCOUNT_RATE_DISABLED = 0.5, DISCOUNT_RATE_MERIT = 0.5, DISCOUNT_RATE_SOLDIER = 0.51,
+			 	DISCOUNT_RATE_PREGNANT = 0.5, DISCOUNT_RATE_FAMILY = 0.7;
  
  //기타	
 	int ticketChoice, ticketTime, personalNumber, ticketAmount, specialOffer, againProcess;			 
@@ -49,7 +46,7 @@ void selectTicket()
 			printf("권종을 선택하세요.\n");
 			printf("1.  종합이용권(롯데월드 + 민속박물관)\n");
 			printf("2.  파크이용권(롯데월드)\n");
-			scanf("%d", &ticketChoice);
+			scanf("%d", &ticketChoice); 
 		} while(!(ticketChoice == 1 || ticketChoice== 2)); 
 	
 }
@@ -357,8 +354,8 @@ void receiptAndFile()
 		t = localtime(&timer); 		// 포맷팅을 위해 구조체에 넣음 
 		
 		fprintf(filePointer, "%d,%d,%d,%d,%d,%d,%d,%d,%d\n",t-> tm_year + 1900, t-> tm_mon + 1, t -> tm_mday,
-																ticketChoiceArr[index], ticketTimeArr[index], ageArr[index], 
-																ticketAmountArr[index], totalFeeArr[index], specialOfferArr[index]);	
+														ticketChoiceArr[index], ticketTimeArr[index], ageArr[index], 
+														ticketAmountArr[index], totalFeeArr[index], specialOfferArr[index]);	
 	// 입장권 종류	
 		switch(ticketChoiceArr[index])
 		{
@@ -476,6 +473,8 @@ void specialOfferCalculation()
 		
 	specialOfferFamily();	// 우대조건 6. 다둥이 행복카드 
 }
+
+
 
 int main()
 {		
